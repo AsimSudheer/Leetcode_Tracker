@@ -1,6 +1,20 @@
 import sqlite3
+
+import os
+
+DB_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "leetcode.db"
+)
+
+print("DATABASE PATH:", DB_PATH)
+
 def get_connection():
-    return sqlite3.connect("leetcode.db")
+    print("Connecting to:", DB_PATH)
+    return sqlite3.connect(DB_PATH)
+
+
+
 def add_problem(title,difficulty,topic,solved=0):
     conn = get_connection()
     cursor = conn.cursor()

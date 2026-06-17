@@ -8,6 +8,7 @@ from crud import get_stats
 
 
 solved,total = get_stats()
+print()
 print(f"SOLVED:{solved} | TOTAL:{total}")
 print()
 print("ALL PROBLEM")
