@@ -9,11 +9,32 @@ DB_PATH = os.path.join(
 
 print("DATABASE PATH:", DB_PATH)
 
+def anazlyze_progress():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""SELECT topic,
+                   COUNT(*) as total,
+                   SUM(solved) as solved
+                   FROM problems
+                   GROUP BY TOPICS""")
+    data = cursor.fetchall()
+    conn.close()
+    return data
+
 def get_connection():
     print("Connecting to:", DB_PATH)
     return sqlite3.connect(DB_PATH)
 
-
+def recommend_next_problem():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""SELECT id,title,difficulty,topic FROM problems
+                   WHERE SOLVED = 0
+                   ORDER BY id
+                   LIMIT 1""")
+    problem = cursor.fetchone()
+    conn.close()
+    return problem
 
 def add_problem(title,difficulty,topic,solved=0):
     conn = get_connection()
