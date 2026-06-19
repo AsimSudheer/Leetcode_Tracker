@@ -1,5 +1,6 @@
 from mcp.server.fastmcp import FastMCP
-from crud import (recommend_next_problem,
+from crud import (smart_recommendation,
+                  recommend_next_problem,
                   anazlyze_progress,
                   get_all_problems,
                   get_stats,
@@ -13,6 +14,19 @@ import os
 print("Current Working Directory:", os.getcwd())
 
 mcp = FastMCP("Leetcode Tracker")
+
+@mcp.tool()
+def recommend_best_problem():
+    """recommend the next problem that needed to be solved from weakest topic"""
+    problem = smart_recommendation()
+    if not problem:
+        return " There is on recommendation"
+    return{
+        "id":problem[0],
+        "title":problem[1],
+        "difficulty":problem[2],
+        "topic":problem[3]
+    }
 
 @mcp.tool()
 def generate_study_plan(days:int):

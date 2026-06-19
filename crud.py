@@ -9,6 +9,28 @@ DB_PATH = os.path.join(
 
 print("DATABASE PATH:", DB_PATH)
 
+def smart_recommendation():
+    conn = get_connection()
+    cursor=conn.cursor()
+    cursor.execute("""SELECT topic,COALESCE(SUM(solved),0) AS solved_count
+                   FROM problems
+                   GROUP BY topic
+                   ORDER BY solved_count ASC
+                   LIMIT 1""")
+    weakest_topic = cursor.fetchone()
+    if not weakest_topic:
+        conn.close()
+        return None
+    topic = weakest_topic[0]
+    cursor.execute("""SELECT id,title,difficulty,topic 
+                   FROM problems
+                   WHERE topic = ?
+                   AND solved=0
+                   LIMIT 1""",(topic,))
+    problem = cursor.fetchone()
+    conn.close()
+    return problem
+
 def anazlyze_progress():
     conn = get_connection()
     cursor = conn.cursor()
