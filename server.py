@@ -1,5 +1,7 @@
 from mcp.server.fastmcp import FastMCP
-from crud import (smart_recommendation,
+from crud import (increment_attempt,
+                  add_note,
+                  smart_recommendation,
                   recommend_next_problem,
                   anazlyze_progress,
                   get_all_problems,
@@ -14,6 +16,17 @@ import os
 print("Current Working Directory:", os.getcwd())
 
 mcp = FastMCP("Leetcode Tracker")
+
+@mcp.tool()
+def add_problem_notes(problem_id:int,notes:str):
+    """add notes of the problem"""
+    add_note(problem_id,notes)
+    return f"notes added to the problem {problem_id}"
+
+@mcp.tool()
+def record_attempt(problem_id:int):
+    increment_attempt(problem_id)
+    return f"attempted record of the problem {problem_id}"
 
 @mcp.tool()
 def recommend_best_problem():

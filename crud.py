@@ -9,6 +9,24 @@ DB_PATH = os.path.join(
 
 print("DATABASE PATH:", DB_PATH)
 
+def add_note(problem_id,notes):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""UPDATE problems 
+                   SET notes = ?
+                   WHERE id=?""",(notes,problem_id))
+    conn.commit()
+    conn.close()
+
+def increment_attempt(problem_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""UPDATE problems 
+                   SET attempts = attempts +1 
+                   WHERE id =?""",(problem_id,))
+    conn.commit()
+    conn.close()
+
 def smart_recommendation():
     conn = get_connection()
     cursor=conn.cursor()
