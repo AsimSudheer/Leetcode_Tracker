@@ -1,5 +1,6 @@
 from mcp.server.fastmcp import FastMCP
-from crud import (increment_attempt,
+from crud import (learning_patterns_analysis,
+                  increment_attempt,
                   add_note,
                   smart_recommendation,
                   recommend_next_problem,
@@ -16,6 +17,11 @@ import os
 print("Current Working Directory:", os.getcwd())
 
 mcp = FastMCP("Leetcode Tracker")
+
+@mcp.tool()
+def analyze_learning_pattern():
+    """to analyse learning pattern of the user"""
+    return learning_patterns_analysis()
 
 @mcp.tool()
 def add_problem_notes(problem_id:int,notes:str):

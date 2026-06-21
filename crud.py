@@ -9,6 +9,39 @@ DB_PATH = os.path.join(
 
 print("DATABASE PATH:", DB_PATH)
 
+def learning_patterns_analysis():
+    conn = get_connection()
+    cursor = conn.cursor()
+    #strongest topic
+    cursor.execute("""SELECT topic,COUNT(*) AS solved_count
+                   FROM problems
+                   WHERE solved = 1
+                   GROUP BY topic
+                   ORDER BY solved_count DESC
+                   LIMIT 3""")
+    strongest = [row[0] for row in cursor.fetchall()]
+    #weakest topic
+    cursor.execute("""SELECT topic,COUNT(*) AS unsolved_count
+                   FROM problems
+                   WHERE solved = 0
+                   GROUP BY topic
+                   ORDER BY unsolved_count DESC
+                   LIMIT 3""")
+    weakest = [row[0] for row in cursor.fetchall()]
+    #high attempt problem
+    cursor.execute("""SELECT title,attempts FROM problems
+                   ORDER BY attempts
+                   LIMIT 5""")
+    attempts = cursor.fetchall()
+    conn.close()
+    return{
+        "strongest_problem":strongest,
+        "weakest_problem":weakest,
+        "high_attempt":attempts
+
+    }
+
+
 def add_note(problem_id,notes):
     conn = get_connection()
     cursor = conn.cursor()
